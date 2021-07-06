@@ -78,7 +78,7 @@ export function getCases(
     return [arr];
   } else {
     const result = [];
-    for (let i = 1; i <= (arr?.[arr.length - 1] || numOfPeople); i++) {
+    for (let i = 1; i <= (arr[arr.length - 1] || numOfPeople) && i <= 16; i++) {
       result.push(...getCases([...arr, i], numOfTasks - 1, numOfPeople));
     }
 
