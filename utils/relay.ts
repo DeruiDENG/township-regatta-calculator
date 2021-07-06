@@ -44,14 +44,12 @@ export function parse(
       completeTaskPoints / fullTaskScore + numOfInprogressTask <= 16
     ) {
       results.push([
-        ...Array(completeTaskPoints / fullTaskScore).fill(16),
+        ...Array(completeTaskPoints / fullTaskScore).fill(numOfPlayers),
         ...inprogressCase.case,
       ]);
     }
   }
 
-  console.log(`Input: ${numOfPlayers} ${points}`);
-  console.log('Output: ', results);
   return { isFullScore: results.length > 0, matches: results };
 }
 
@@ -78,7 +76,7 @@ export function getCases(
     return [arr];
   } else {
     const result = [];
-    for (let i = 1; i <= (arr[arr.length - 1] || numOfPeople) && i <= 16; i++) {
+    for (let i = 1; i <= (arr[arr.length - 1] || numOfPeople - 1); i++) {
       result.push(...getCases([...arr, i], numOfTasks - 1, numOfPeople));
     }
 

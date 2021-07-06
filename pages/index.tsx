@@ -69,7 +69,7 @@ export default function Home() {
             {matches.length > 0 && (
               <>
                 <p>可能的组合(完成每一个任务的队员人数)：</p>
-                {matches.splice(0, 6).map((match, index) => {
+                {matches.splice(0, 10).map((match, index) => {
                   return (
                     <div className={styles.match} key={index}>
                       {JSON.stringify(match)}
