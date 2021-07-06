@@ -1,16 +1,19 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import { useState } from 'react';
-import { parse } from '../utils/relay';
+import { FormEvent, useState } from 'react';
+import { parse, RegattaStatus } from '../utils/relay';
 
 export default function Home() {
   const [playerNumber, setPlayerNumber] = useState(5);
   const [points, setPoints] = useState<string>('');
-  const [result, setResult] = useState('');
-  const onClick = () => {
-    const { isFullScore } = parse(playerNumber, Number(points));
-    setResult(isFullScore ? '可能是全接力队伍' : '不是全接力队伍');
+  const [matches, setResult] = useState<RegattaStatus[]>([]);
+  const [isButtonClicked, setButtonClicked] = useState(false);
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setButtonClicked(true);
+    const { matches } = parse(playerNumber, Number(points));
+    setResult(matches);
   };
   return (
     <div className={styles.container}>
@@ -27,8 +30,8 @@ export default function Home() {
           这个工具会帮助你计算对手是否为全接力模式
         </p>
 
-        <div>
-          <label>
+        <form className={styles.form} onSubmit={onSubmit}>
+          <label className={styles.label}>
             参赛成员数量：
             <select
               name="player-number"
@@ -46,19 +49,37 @@ export default function Home() {
               ))}
             </select>
           </label>
-          <label>
+          <label className={styles.label}>
             对手分数：
             <input
               type="number"
               value={points}
+              min={0}
               onChange={(event) => setPoints(event.target.value)}
+              required
             />
           </label>
-          <button type="button" onClick={onClick}>
-            提交
-          </button>
-        </div>
-        <p className={styles.description}>{result}</p>
+          <button>提交</button>
+        </form>
+        {isButtonClicked && (
+          <>
+            <p className={styles.description}>
+              {matches.length ? '可能是全接力队伍' : '不是全接力队伍'}
+            </p>
+            {matches.length > 0 && (
+              <>
+                <p>可能的组合(完成每一个任务的队员人数)：</p>
+                {matches.map((match, index) => {
+                  return (
+                    <div className={styles.match} key={index}>
+                      {JSON.stringify(match)}
+                    </div>
+                  );
+                })}
+              </>
+            )}
+          </>
+        )}
       </main>
 
       <footer className={styles.footer}>

@@ -21,7 +21,7 @@ function getSingleTaskScore(numOfPlayersDone: number): number {
 }
 
 type TaskStatus = number;
-type RegattaStatus = TaskStatus[];
+export type RegattaStatus = TaskStatus[];
 
 export function parse(
   numOfPlayers: number,
