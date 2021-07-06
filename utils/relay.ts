@@ -20,33 +20,34 @@ function getSingleTaskScore(numOfPlayersDone: number): number {
   );
 }
 
-type RegattaStatus = number[];
+type TaskStatus = number;
+type RegattaStatus = TaskStatus[];
 
 export function parse(
   numOfPlayers: number,
   points: number
 ): { isFullScore: boolean; matches: RegattaStatus[] } {
   const maxNumberOfInprogressTask = getMaxNumberOfInprogressTask(numOfPlayers);
-  const queue: RegattaStatus[] = [Array(16).fill(0)];
-  const results: RegattaStatus[] = [];
-  while (queue.length) {
-    const combination = queue.pop() as number[];
-    const sum = combination.reduce(
-      (acc, cur) => acc + getSingleTaskScore(cur),
-      0
-    );
-    if (sum === points) {
-      results.push(combination);
-    } else if (sum > points) {
-      continue;
-    }
+  const inprogressCases: { points: number; case: RegattaStatus }[] = [];
+  for (let i = 0; i <= maxNumberOfInprogressTask; i++) {
+    inprogressCases.push(...getPossibleIncompleteCases(numOfPlayers, i));
+  }
 
-    const nextStatus = getNextStatus(
-      combination,
-      numOfPlayers,
-      maxNumberOfInprogressTask
-    );
-    queue.unshift(...nextStatus);
+  const fullTaskScore = getSingleTaskScore(numOfPlayers);
+  const results: RegattaStatus[] = [];
+  for (const inprogressCase of inprogressCases) {
+    const numOfInprogressTask = inprogressCase.case.length;
+    const completeTaskPoints = points - inprogressCase.points;
+    if (
+      completeTaskPoints >= 0 &&
+      completeTaskPoints % fullTaskScore === 0 &&
+      completeTaskPoints / fullTaskScore + numOfInprogressTask <= 16
+    ) {
+      results.push([
+        ...Array(completeTaskPoints / fullTaskScore).fill(16),
+        ...inprogressCase.case,
+      ]);
+    }
   }
 
   console.log(`Input: ${numOfPlayers} ${points}`);
@@ -54,27 +55,35 @@ export function parse(
   return { isFullScore: results.length > 0, matches: results };
 }
 
-function getNextStatus(
-  currentStatus: RegattaStatus,
-  numOfPlayers: number,
-  maxNumberOfInprogress: number
+export function getPossibleIncompleteCases(
+  numOfPerson: number,
+  numOfTasks: number
+): { points: number; case: RegattaStatus }[] {
+  const cases = getCases([], numOfTasks, numOfPerson);
+  return cases.map((singleCase) => ({
+    case: singleCase,
+    points: singleCase.reduce(
+      (points, taskStatus) => points + getSingleTaskScore(taskStatus),
+      0
+    ),
+  }));
+}
+
+export function getCases(
+  arr: RegattaStatus,
+  numOfTasks: number,
+  numOfPeople: number
 ): RegattaStatus[] {
-  return currentStatus
-    .map((task, index) => {
-      const newTask = [...currentStatus];
-      newTask[index]++;
-      return newTask;
-    })
-    .filter((nextStatus) => {
-      const isOrdered = nextStatus.every(
-        (val, index, array) => index === 0 || val <= array[index - 1]
-      );
-      const isInScope = nextStatus.every((val) => val <= numOfPlayers);
-      const inprogressCount = nextStatus.filter(
-        (taskStatus) => taskStatus < numOfPlayers && taskStatus > 0
-      ).length;
-      return isOrdered && isInScope && inprogressCount <= maxNumberOfInprogress;
-    });
+  if (numOfTasks === 0) {
+    return [arr];
+  } else {
+    const result = [];
+    for (let i = 1; i <= (arr?.[arr.length - 1] || numOfPeople); i++) {
+      result.push(...getCases([...arr, i], numOfTasks - 1, numOfPeople));
+    }
+
+    return result;
+  }
 }
 
 function getMaxNumberOfInprogressTask(numOfPlayers: number): number {
