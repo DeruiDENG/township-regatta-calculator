@@ -4,9 +4,6 @@ This is a relay task points calculator for the
 game [Township](https://play.google.com/store/apps/details?id=com.playrix.township&hl=en&gl=us), which will help you check
 whether other teams are doing full relay task or not.
 
-Living website:
-https://township-regatta-calculator.vercel.app/
-
 More info about the Township and regatta relay race can be found in [Here](https://township.fandom.com/wiki/Regatta)
 
 ## How to use
