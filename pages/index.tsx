@@ -7,15 +7,15 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Regatta Points Calculater</title>
+        <title>接力分数计算器</title>
         <meta name="description" content="Regatta Points Calculater" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Regatta Points Calculator</h1>
+        <h1 className={styles.title}>接力分数计算器</h1>
         <p className={styles.description}>
-          这个工具会帮助你计算对手是否为全接力模式
+          这个工具会帮助你计算对手是否为全接力
         </p>
         <Calculator />
       </main>

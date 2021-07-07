@@ -1,0 +1,7 @@
+$screen-sm-max: 768px;
+
+@mixin mobile {
+  @media (max-width: #{$screen-sm-max}) {
+    @content;
+  }
+}

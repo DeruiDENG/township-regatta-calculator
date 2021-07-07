@@ -17,8 +17,10 @@ export const Calculator = () => {
   return (
     <>
       <form className={styles.form} onSubmit={onSubmit}>
-        <label className={styles.label}>
-          参赛成员数量：
+        <div className={styles.formItem}>
+          <label htmlFor="player-number" className={styles.label}>
+            参赛成员数量：
+          </label>
           <select
             name="player-number"
             id="player-number"
@@ -34,17 +36,20 @@ export const Calculator = () => {
               </option>
             ))}
           </select>
-        </label>
-        <label className={styles.label}>
-          对手分数：
+        </div>
+        <div className={styles.formItem}>
+          <label htmlFor="points-input" className={styles.label}>
+            对手分数：
+          </label>
           <input
+            id="points-input"
             type="number"
             value={points}
             min={0}
             onChange={(event) => setPoints(event.target.value)}
             required
           />
-        </label>
+        </div>
         <button>提交</button>
       </form>
       {isButtonClicked && (
