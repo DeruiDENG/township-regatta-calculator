@@ -86,15 +86,17 @@ describe('#analysis', () => {
   });
 
   describe('#getPossibleIncompleteCases', () => {
-    const result = getPossibleIncompleteCases(4, 2);
-    expect(result).toContainEqual({
-      points: 130 + 130,
-      case: [1, 1],
-    });
-    expect(result).toContainEqual({ points: 130 + 135 + 130, case: [2, 1] });
-    expect(result).toContainEqual({
-      points: 130 + 135 + 140 + 145 + 130,
-      case: [4, 1],
+    test('should return incomplete cases', () => {
+      const result = getPossibleIncompleteCases(12, 2);
+      expect(result).toContainEqual({
+        points: 130 + 130,
+        case: [1, 1],
+      });
+      expect(result).toContainEqual({ points: 130 + 135 + 130, case: [2, 1] });
+      expect(result).toContainEqual({
+        points: 130 + 135 + 140 + 145 + 130,
+        case: [4, 1],
+      });
     });
   });
 });
