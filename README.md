@@ -1,5 +1,8 @@
 # Township Regatta Relay Task Calculator
 
+## 19 June, 2023
+Township has changed the regatta tasks rules, therefore, this calculator is not import anymore.
+
 This is a relay task points calculator for the
 game [Township](https://play.google.com/store/apps/details?id=com.playrix.township&hl=en&gl=us), which will help you check
 whether other teams are doing full relay task or not.
